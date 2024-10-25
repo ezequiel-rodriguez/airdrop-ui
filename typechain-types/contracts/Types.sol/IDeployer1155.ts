@@ -21,34 +21,33 @@ import type {
   TypedContractMethod,
 } from "../../common";
 
-export interface IERC1155Interface extends Interface {
-  getFunction(
-    nameOrSignature: "balanceOf" | "getUri" | "safeTransferFrom"
-  ): FunctionFragment;
+export interface IDeployer1155Interface extends Interface {
+  getFunction(nameOrSignature: "deployAndAddAirdrop"): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "balanceOf",
-    values: [AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "getUri", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "safeTransferFrom",
-    values: [AddressLike, AddressLike, BigNumberish, BigNumberish, BytesLike]
+    functionFragment: "deployAndAddAirdrop",
+    values: [
+      string,
+      AddressLike,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
   ): string;
 
-  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getUri", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "safeTransferFrom",
+    functionFragment: "deployAndAddAirdrop",
     data: BytesLike
   ): Result;
 }
 
-export interface IERC1155 extends BaseContract {
-  connect(runner?: ContractRunner | null): IERC1155;
+export interface IDeployer1155 extends BaseContract {
+  connect(runner?: ContractRunner | null): IDeployer1155;
   waitForDeployment(): Promise<this>;
 
-  interface: IERC1155Interface;
+  interface: IDeployer1155Interface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -87,23 +86,17 @@ export interface IERC1155 extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  balanceOf: TypedContractMethod<
-    [account: AddressLike, id: BigNumberish],
-    [bigint],
-    "view"
-  >;
-
-  getUri: TypedContractMethod<[], [string], "view">;
-
-  safeTransferFrom: TypedContractMethod<
+  deployAndAddAirdrop: TypedContractMethod<
     [
-      from: AddressLike,
-      to: AddressLike,
-      id: BigNumberish,
-      amount: BigNumberish,
-      data: BytesLike
+      airdropName: string,
+      tokenAddress: AddressLike,
+      tokenId: BigNumberish,
+      totalAirdropAmount: BigNumberish,
+      claimAmount: BigNumberish,
+      expirationDate: BigNumberish,
+      mode: BigNumberish
     ],
-    [void],
+    [string],
     "nonpayable"
   >;
 
@@ -112,26 +105,18 @@ export interface IERC1155 extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "balanceOf"
-  ): TypedContractMethod<
-    [account: AddressLike, id: BigNumberish],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "getUri"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "safeTransferFrom"
+    nameOrSignature: "deployAndAddAirdrop"
   ): TypedContractMethod<
     [
-      from: AddressLike,
-      to: AddressLike,
-      id: BigNumberish,
-      amount: BigNumberish,
-      data: BytesLike
+      airdropName: string,
+      tokenAddress: AddressLike,
+      tokenId: BigNumberish,
+      totalAirdropAmount: BigNumberish,
+      claimAmount: BigNumberish,
+      expirationDate: BigNumberish,
+      mode: BigNumberish
     ],
-    [void],
+    [string],
     "nonpayable"
   >;
 

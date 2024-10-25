@@ -3,8 +3,12 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
+  BytesLike,
   FunctionFragment,
+  Result,
   Interface,
+  AddressLike,
   ContractRunner,
   ContractMethod,
   Listener,
@@ -14,15 +18,36 @@ import type {
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
-} from "../../../../common";
+  TypedContractMethod,
+} from "../common";
 
-export interface MathInterface extends Interface {}
+export interface AirdropDeployerERC1155Interface extends Interface {
+  getFunction(nameOrSignature: "deployAndAddAirdrop"): FunctionFragment;
 
-export interface Math extends BaseContract {
-  connect(runner?: ContractRunner | null): Math;
+  encodeFunctionData(
+    functionFragment: "deployAndAddAirdrop",
+    values: [
+      string,
+      AddressLike,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
+
+  decodeFunctionResult(
+    functionFragment: "deployAndAddAirdrop",
+    data: BytesLike
+  ): Result;
+}
+
+export interface AirdropDeployerERC1155 extends BaseContract {
+  connect(runner?: ContractRunner | null): AirdropDeployerERC1155;
   waitForDeployment(): Promise<this>;
 
-  interface: MathInterface;
+  interface: AirdropDeployerERC1155Interface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -61,9 +86,39 @@ export interface Math extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  deployAndAddAirdrop: TypedContractMethod<
+    [
+      airdropName: string,
+      tokenAddress: AddressLike,
+      tokenId: BigNumberish,
+      totalAirdropAmount: BigNumberish,
+      claimAmount: BigNumberish,
+      expirationDate: BigNumberish,
+      mode: BigNumberish
+    ],
+    [string],
+    "nonpayable"
+  >;
+
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
+
+  getFunction(
+    nameOrSignature: "deployAndAddAirdrop"
+  ): TypedContractMethod<
+    [
+      airdropName: string,
+      tokenAddress: AddressLike,
+      tokenId: BigNumberish,
+      totalAirdropAmount: BigNumberish,
+      claimAmount: BigNumberish,
+      expirationDate: BigNumberish,
+      mode: BigNumberish
+    ],
+    [string],
+    "nonpayable"
+  >;
 
   filters: {};
 }

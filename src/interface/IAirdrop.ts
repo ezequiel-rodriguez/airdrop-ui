@@ -5,13 +5,14 @@ export interface IAirdrop {
   airdropAmountLeft: number
   claimAmount: number
   expirationDate: Date
+  airdropType: 'custom' | 'merkle',
+  uri?: string
   progress?: number
   isClaimed?: boolean
   isAllowed?: boolean
   isExpired?: boolean
   balance?: number
   new?: boolean
-  airdropType: 'custom' | 'merkle',
   merkle?: {
     address: string
     proof: string[],
@@ -23,5 +24,6 @@ export interface ICreateAirdrop {
   tokenAddress: string,
   totalAmount: number,
   claimAmount: number,
-  expirationDate: string
+  expirationDate: string,
+  mode?: 0 | 1 | 2
 }

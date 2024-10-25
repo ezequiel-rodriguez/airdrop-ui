@@ -2,5 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { IAirdrop } from "./IAirdrop";
+export type { IDeployer1155 } from "./IDeployer1155";
+export type { IDeployerERC20 } from "./IDeployerERC20";
 export type { IERC1155 } from "./IERC1155";
 export type { IERC20 } from "./IERC20";

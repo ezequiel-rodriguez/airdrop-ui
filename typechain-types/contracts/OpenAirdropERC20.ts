@@ -31,6 +31,7 @@ export type AirdropInfoStruct = {
   claimAmount: BigNumberish;
   expirationDate: BigNumberish;
   airdropType: BigNumberish;
+  uri: string;
 };
 
 export type AirdropInfoStructOutput = [
@@ -40,7 +41,8 @@ export type AirdropInfoStructOutput = [
   airdropAmountLeft: bigint,
   claimAmount: bigint,
   expirationDate: bigint,
-  airdropType: bigint
+  airdropType: bigint,
+  uri: string
 ] & {
   airdropName: string;
   airdropAddress: string;
@@ -49,6 +51,7 @@ export type AirdropInfoStructOutput = [
   claimAmount: bigint;
   expirationDate: bigint;
   airdropType: bigint;
+  uri: string;
 };
 
 export interface OpenAirdropERC20Interface extends Interface {
@@ -60,7 +63,6 @@ export interface OpenAirdropERC20Interface extends Interface {
       | "getBalance"
       | "getClaimAmount"
       | "getExpirationDate"
-      | "getTokenUri"
       | "getTotalAirdropAmount"
       | "hasBalanceToClaim"
       | "hasBeenTotallyClaimed"
@@ -102,10 +104,6 @@ export interface OpenAirdropERC20Interface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getExpirationDate",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTokenUri",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -158,10 +156,6 @@ export interface OpenAirdropERC20Interface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getExpirationDate",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTokenUri",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -299,8 +293,6 @@ export interface OpenAirdropERC20 extends BaseContract {
 
   getExpirationDate: TypedContractMethod<[], [bigint], "view">;
 
-  getTokenUri: TypedContractMethod<[], [string], "view">;
-
   getTotalAirdropAmount: TypedContractMethod<[], [bigint], "view">;
 
   hasBalanceToClaim: TypedContractMethod<[], [boolean], "view">;
@@ -349,9 +341,6 @@ export interface OpenAirdropERC20 extends BaseContract {
   getFunction(
     nameOrSignature: "getExpirationDate"
   ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "getTokenUri"
-  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "getTotalAirdropAmount"
   ): TypedContractMethod<[], [bigint], "view">;

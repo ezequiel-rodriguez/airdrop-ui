@@ -138,6 +138,11 @@ const _abi = [
             name: "airdropType",
             type: "uint8",
           },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
         ],
         internalType: "struct AirdropInfo",
         name: "info",
@@ -181,19 +186,6 @@ const _abi = [
         internalType: "uint256",
         name: "",
         type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getTokenUri",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
       },
     ],
     stateMutability: "view",

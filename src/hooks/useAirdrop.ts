@@ -1,6 +1,6 @@
 'use client'
 import {
-  AIRDROP_MANAGER_ADDRESS,
+  AIRDROP_MANAGER_ERC20_ADDRESS,
   ARKA_PUBLIC_KEY,
   BUNDLER_API_KEY,
   CHAIN_ID,
@@ -49,25 +49,20 @@ const useAirdrop = () => {
       PROVIDER.current = await provider.getSigner()
     }
     const airdropManager = AirdropManager__factory.connect(
-      AIRDROP_MANAGER_ADDRESS!,
+      AIRDROP_MANAGER_ERC20_ADDRESS!,
       PROVIDER.current
     )
     setAirdropManager(airdropManager)
     return airdropManager
   }, [provider])
 
-  useEffect(() => {
-    initializeProvider()
-  }, [provider, initializeProvider])
-
   const getAllAirdrops = useCallback(async () => {
     setAirdropLoading(true)
     const airdropManager = await initializeProvider()
     const items = await airdropManager?.getAirdrops()
     const airdropsDetail: IAirdrop[] = []
-    for (const air in items) {
-      const detail = await airdropManager?.getAirdropInfo(items[Number(air)])
-
+    for (const item in items) {
+      const detail = await airdropManager?.getAirdropInfo(items[Number(item)])
       const newAirdrop: IAirdrop = {
         name: detail![0].toString(),
         address: detail![1].toString(),
@@ -75,19 +70,20 @@ const useAirdrop = () => {
         airdropAmountLeft: Number(ethers.formatEther(detail![3])),
         claimAmount: Number(ethers.formatEther(detail![4])),
         expirationDate: new Date(parseFloat(detail![5].toString()) * 1000),
-        airdropType: Number(ethers.toBigInt(detail[6])) ? 'merkle' : 'custom',
+        airdropType: Number(ethers.toBigInt(detail[6])) ? 'merkle' : 'custom', //TODO change for correct reading value type 0 custom 1 merkle 2 fungible
+        uri: detail![7].toString(),
       }
 
       const balance = await airdropManager.getBalance(newAirdrop.address)
       newAirdrop.balance = Number(ethers.formatEther(balance))
       if (address) {
         newAirdrop.isClaimed = await airdropManager.hasClaimed(
-          items[Number(air)].toString(),
+          items[Number(item)].toString(),
           address
         )
         if (newAirdrop.airdropType === 'custom') {
           newAirdrop.isAllowed = await airdropManager.isAllowed(
-            items[Number(air)].toString(),
+            items[Number(item)].toString(),
             address
           )
         } else {
@@ -118,13 +114,14 @@ const useAirdrop = () => {
   }, [initializeProvider, setAirdropLoading, setIsAdmin, address, setAirdrops])
 
   const fetchImage = async (airdropAddress: string) => {
-    try {
-      const airdropManager = await initializeProvider()
-      const imgLink = await airdropManager?.getAirdropTokenUri(airdropAddress)
-      return `${PINATA_URL}${imgLink}`
-    } catch (error) {
-      console.log('error: ', error);
-    }
+    // try {
+    //   const airdropManager = await initializeProvider()
+    //   const imgLink = await airdropManager?.getAirdropTokenUri(airdropAddress)
+    //   return `${PINATA_URL}${imgLink}`
+    // } catch (error) {
+    //   console.log('error: ', error);
+    // }
+    //TODO get it from the item
   }
   const removeAirdrop = async (airdropAddress: string) => {
     try {
@@ -169,14 +166,22 @@ const useAirdrop = () => {
         }
         const txReceipt = await sponsoredCall(
           airdropManager,
-          'deployAndAddOpenERC20Airdrop',
+          'deployAndAddAirdrop',
           [name, tokenAddress, total, claim, date],
-          AIRDROP_MANAGER_ADDRESS!
+          AIRDROP_MANAGER_ERC20_ADDRESS!
         )
         setIsLoading(FETCH_STATUS.WAIT_TX)
         setTx(txReceipt.transactionHash)
       } else {
-        const response = await airdropManager?.deployAndAddOpenERC20Airdrop(name, tokenAddress, total, claim, date);
+        const response = await airdropManager?.deployAndAddAirdrop(
+          name, 
+          tokenAddress,
+          0,
+          total, 
+          claim, 
+          date,
+          0
+        );
         setIsLoading(FETCH_STATUS.WAIT_TX)
         setTx(response)
         await response?.wait()
@@ -225,7 +230,7 @@ const useAirdrop = () => {
       const bundlerApiKey = BUNDLER_API_KEY
       const customBundlerUrl = CUSTOM_BUNDLER_URL
       const chainId = Number(CHAIN_ID)
-      const airdropManagerAddress = AIRDROP_MANAGER_ADDRESS
+      const airdropManagerAddress = AIRDROP_MANAGER_ERC20_ADDRESS
       const apiKey = ARKA_PUBLIC_KEY
       if (
         !metamaskProvider ||

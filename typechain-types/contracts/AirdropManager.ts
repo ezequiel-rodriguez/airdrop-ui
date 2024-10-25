@@ -31,6 +31,7 @@ export type AirdropInfoStruct = {
   claimAmount: BigNumberish;
   expirationDate: BigNumberish;
   airdropType: BigNumberish;
+  uri: string;
 };
 
 export type AirdropInfoStructOutput = [
@@ -40,7 +41,8 @@ export type AirdropInfoStructOutput = [
   airdropAmountLeft: bigint,
   claimAmount: bigint,
   expirationDate: bigint,
-  airdropType: bigint
+  airdropType: bigint,
+  uri: string
 ] & {
   airdropName: string;
   airdropAddress: string;
@@ -49,22 +51,22 @@ export type AirdropInfoStructOutput = [
   claimAmount: bigint;
   expirationDate: bigint;
   airdropType: bigint;
+  uri: string;
 };
 
 export interface AirdropManagerInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "addAdmin"
-      | "addAirdrop"
       | "allowAddress"
       | "allowAddresses"
       | "claim"
-      | "deployAndAddOpenERC20Airdrop"
+      | "deployAndAddAirdropERC1155"
+      | "deployAndAddAirdropERC20"
       | "disallowAddress"
       | "disallowAddresses"
       | "getAirdropAmountLeft"
       | "getAirdropInfo"
-      | "getAirdropTokenUri"
       | "getAirdrops"
       | "getBalance"
       | "getClaimAmount"
@@ -82,16 +84,13 @@ export interface AirdropManagerInterface extends Interface {
   getEvent(
     nameOrSignatureOrTopic:
       | "AirdropAdded"
-      | "AirdropDeployed"
+      | "AirdropERC1155Deployed"
+      | "AirdropERC20Deployed"
       | "AirdropRemoved"
   ): EventFragment;
 
   encodeFunctionData(
     functionFragment: "addAdmin",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addAirdrop",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
@@ -107,7 +106,19 @@ export interface AirdropManagerInterface extends Interface {
     values: [AddressLike, AddressLike, BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "deployAndAddOpenERC20Airdrop",
+    functionFragment: "deployAndAddAirdropERC1155",
+    values: [
+      string,
+      AddressLike,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "deployAndAddAirdropERC20",
     values: [string, AddressLike, BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -124,10 +135,6 @@ export interface AirdropManagerInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getAirdropInfo",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getAirdropTokenUri",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
@@ -180,7 +187,6 @@ export interface AirdropManagerInterface extends Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "addAdmin", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "addAirdrop", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "allowAddress",
     data: BytesLike
@@ -191,7 +197,11 @@ export interface AirdropManagerInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "deployAndAddOpenERC20Airdrop",
+    functionFragment: "deployAndAddAirdropERC1155",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "deployAndAddAirdropERC20",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -208,10 +218,6 @@ export interface AirdropManagerInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getAirdropInfo",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getAirdropTokenUri",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -258,7 +264,19 @@ export namespace AirdropAddedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace AirdropDeployedEvent {
+export namespace AirdropERC1155DeployedEvent {
+  export type InputTuple = [airdropAddress: AddressLike];
+  export type OutputTuple = [airdropAddress: string];
+  export interface OutputObject {
+    airdropAddress: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace AirdropERC20DeployedEvent {
   export type InputTuple = [airdropAddress: AddressLike];
   export type OutputTuple = [airdropAddress: string];
   export interface OutputObject {
@@ -327,12 +345,6 @@ export interface AirdropManager extends BaseContract {
 
   addAdmin: TypedContractMethod<[_newAdmin: AddressLike], [void], "nonpayable">;
 
-  addAirdrop: TypedContractMethod<
-    [newAirdropAddress: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
   allowAddress: TypedContractMethod<
     [airdropAddress: AddressLike, user: AddressLike],
     [void],
@@ -356,7 +368,21 @@ export interface AirdropManager extends BaseContract {
     "nonpayable"
   >;
 
-  deployAndAddOpenERC20Airdrop: TypedContractMethod<
+  deployAndAddAirdropERC1155: TypedContractMethod<
+    [
+      airdropName: string,
+      tokenAddress: AddressLike,
+      tokenId: BigNumberish,
+      totalAirdropAmount: BigNumberish,
+      claimAmount: BigNumberish,
+      expirationDate: BigNumberish,
+      mode: BigNumberish
+    ],
+    [string],
+    "nonpayable"
+  >;
+
+  deployAndAddAirdropERC20: TypedContractMethod<
     [
       airdropName: string,
       tokenAddress: AddressLike,
@@ -389,12 +415,6 @@ export interface AirdropManager extends BaseContract {
   getAirdropInfo: TypedContractMethod<
     [airdropAddress: AddressLike],
     [AirdropInfoStructOutput],
-    "view"
-  >;
-
-  getAirdropTokenUri: TypedContractMethod<
-    [airdropAddress: AddressLike],
-    [string],
     "view"
   >;
 
@@ -466,13 +486,6 @@ export interface AirdropManager extends BaseContract {
     nameOrSignature: "addAdmin"
   ): TypedContractMethod<[_newAdmin: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "addAirdrop"
-  ): TypedContractMethod<
-    [newAirdropAddress: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
     nameOrSignature: "allowAddress"
   ): TypedContractMethod<
     [airdropAddress: AddressLike, user: AddressLike],
@@ -499,7 +512,22 @@ export interface AirdropManager extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "deployAndAddOpenERC20Airdrop"
+    nameOrSignature: "deployAndAddAirdropERC1155"
+  ): TypedContractMethod<
+    [
+      airdropName: string,
+      tokenAddress: AddressLike,
+      tokenId: BigNumberish,
+      totalAirdropAmount: BigNumberish,
+      claimAmount: BigNumberish,
+      expirationDate: BigNumberish,
+      mode: BigNumberish
+    ],
+    [string],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "deployAndAddAirdropERC20"
   ): TypedContractMethod<
     [
       airdropName: string,
@@ -535,9 +563,6 @@ export interface AirdropManager extends BaseContract {
     [AirdropInfoStructOutput],
     "view"
   >;
-  getFunction(
-    nameOrSignature: "getAirdropTokenUri"
-  ): TypedContractMethod<[airdropAddress: AddressLike], [string], "view">;
   getFunction(
     nameOrSignature: "getAirdrops"
   ): TypedContractMethod<[], [string[]], "view">;
@@ -595,11 +620,18 @@ export interface AirdropManager extends BaseContract {
     AirdropAddedEvent.OutputObject
   >;
   getEvent(
-    key: "AirdropDeployed"
+    key: "AirdropERC1155Deployed"
   ): TypedContractEvent<
-    AirdropDeployedEvent.InputTuple,
-    AirdropDeployedEvent.OutputTuple,
-    AirdropDeployedEvent.OutputObject
+    AirdropERC1155DeployedEvent.InputTuple,
+    AirdropERC1155DeployedEvent.OutputTuple,
+    AirdropERC1155DeployedEvent.OutputObject
+  >;
+  getEvent(
+    key: "AirdropERC20Deployed"
+  ): TypedContractEvent<
+    AirdropERC20DeployedEvent.InputTuple,
+    AirdropERC20DeployedEvent.OutputTuple,
+    AirdropERC20DeployedEvent.OutputObject
   >;
   getEvent(
     key: "AirdropRemoved"
@@ -621,15 +653,26 @@ export interface AirdropManager extends BaseContract {
       AirdropAddedEvent.OutputObject
     >;
 
-    "AirdropDeployed(address)": TypedContractEvent<
-      AirdropDeployedEvent.InputTuple,
-      AirdropDeployedEvent.OutputTuple,
-      AirdropDeployedEvent.OutputObject
+    "AirdropERC1155Deployed(address)": TypedContractEvent<
+      AirdropERC1155DeployedEvent.InputTuple,
+      AirdropERC1155DeployedEvent.OutputTuple,
+      AirdropERC1155DeployedEvent.OutputObject
     >;
-    AirdropDeployed: TypedContractEvent<
-      AirdropDeployedEvent.InputTuple,
-      AirdropDeployedEvent.OutputTuple,
-      AirdropDeployedEvent.OutputObject
+    AirdropERC1155Deployed: TypedContractEvent<
+      AirdropERC1155DeployedEvent.InputTuple,
+      AirdropERC1155DeployedEvent.OutputTuple,
+      AirdropERC1155DeployedEvent.OutputObject
+    >;
+
+    "AirdropERC20Deployed(address)": TypedContractEvent<
+      AirdropERC20DeployedEvent.InputTuple,
+      AirdropERC20DeployedEvent.OutputTuple,
+      AirdropERC20DeployedEvent.OutputObject
+    >;
+    AirdropERC20Deployed: TypedContractEvent<
+      AirdropERC20DeployedEvent.InputTuple,
+      AirdropERC20DeployedEvent.OutputTuple,
+      AirdropERC20DeployedEvent.OutputObject
     >;
 
     "AirdropRemoved(address)": TypedContractEvent<

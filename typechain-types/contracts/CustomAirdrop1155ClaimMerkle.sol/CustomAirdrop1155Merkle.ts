@@ -31,6 +31,7 @@ export type AirdropInfoStruct = {
   claimAmount: BigNumberish;
   expirationDate: BigNumberish;
   airdropType: BigNumberish;
+  uri: string;
 };
 
 export type AirdropInfoStructOutput = [
@@ -40,7 +41,8 @@ export type AirdropInfoStructOutput = [
   airdropAmountLeft: bigint,
   claimAmount: bigint,
   expirationDate: bigint,
-  airdropType: bigint
+  airdropType: bigint,
+  uri: string
 ] & {
   airdropName: string;
   airdropAddress: string;
@@ -49,6 +51,7 @@ export type AirdropInfoStructOutput = [
   claimAmount: bigint;
   expirationDate: bigint;
   airdropType: bigint;
+  uri: string;
 };
 
 export interface CustomAirdrop1155MerkleInterface extends Interface {
@@ -61,6 +64,7 @@ export interface CustomAirdrop1155MerkleInterface extends Interface {
       | "getBalance"
       | "getExpirationDate"
       | "getTotalAirdropAmount"
+      | "getUri"
       | "hasBeenTotallyClaimed"
       | "hasClaimed"
       | "hasExpired"
@@ -104,6 +108,7 @@ export interface CustomAirdrop1155MerkleInterface extends Interface {
     functionFragment: "getTotalAirdropAmount",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "getUri", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "hasBeenTotallyClaimed",
     values?: undefined
@@ -154,6 +159,7 @@ export interface CustomAirdrop1155MerkleInterface extends Interface {
     functionFragment: "getTotalAirdropAmount",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getUri", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "hasBeenTotallyClaimed",
     data: BytesLike
@@ -264,6 +270,8 @@ export interface CustomAirdrop1155Merkle extends BaseContract {
 
   getTotalAirdropAmount: TypedContractMethod<[], [bigint], "view">;
 
+  getUri: TypedContractMethod<[], [string], "view">;
+
   hasBeenTotallyClaimed: TypedContractMethod<[], [boolean], "view">;
 
   hasClaimed: TypedContractMethod<[_address: AddressLike], [boolean], "view">;
@@ -325,6 +333,9 @@ export interface CustomAirdrop1155Merkle extends BaseContract {
   getFunction(
     nameOrSignature: "getTotalAirdropAmount"
   ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getUri"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "hasBeenTotallyClaimed"
   ): TypedContractMethod<[], [boolean], "view">;
