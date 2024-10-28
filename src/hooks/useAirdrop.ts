@@ -162,7 +162,25 @@ const useAirdrop = () => {
     try {
       setIsLoading(FETCH_STATUS.WAIT_WALLET)
       if(gasless) {
-
+        if(!_airdropManager) {
+          throw new Error('AirdropManager not initialized');
+        }
+        const txReceipt = await sponsoredCall(
+          _airdropManager,
+          'deployAndAddAirdropERC1155',
+          [
+            name, 
+            tokenAddress, 
+            BigInt(tokenId),
+            total, 
+            claim, 
+            date,  
+            merkle ? BigInt(1) : BigInt(0)
+          ],
+          AIRDROP_MANAGER_ERC20_ADDRESS!
+        )
+        setIsLoading(FETCH_STATUS.WAIT_TX)
+        setTx(txReceipt.transactionHash)
       } else {
         if(!_airdropManager) {
           throw new Error('AirdropManager not initialized');
