@@ -149,20 +149,38 @@ const useAirdrop = () => {
       setIsLoading(FETCH_STATUS.ERROR)
     }
   }
-  const deployERC1155Airdrop = async(airdrop: ICreateAirdrop) => {
-    const { name, tokenAddress, totalAmount, claimAmount, expirationDate } = airdrop;
-    console.log('entering to airdrop creation');
+  const deployERC1155Airdrop = async(airdrop: ICreateAirdrop, merkle: boolean) => {
+    const { name, tokenAddress, totalAmount, claimAmount, expirationDate, tokenId } = airdrop;
     const _airdropManager = await initializeProvider()
-    console.log('airdrop manager is ', _airdropManager);
     const formatDate = new Date(expirationDate + ':00Z');
     const date = formatDate.getTime() / 1000;
-
     const total = ethers.parseEther(totalAmount.toString());
     const claim = ethers.parseEther(claimAmount.toString());
-    console.log('total: ', total.toString());
-    console.log('claim: ', claim.toString());
+    if(!tokenId){
+      throw new Error('TokenId is required');
+    }
     try {
-      
+      setIsLoading(FETCH_STATUS.WAIT_WALLET)
+      if(gasless) {
+
+      } else {
+        if(!_airdropManager) {
+          throw new Error('AirdropManager not initialized');
+        }
+        const response = await _airdropManager?.deployAndAddAirdropERC1155(
+          name, 
+          tokenAddress,
+          BigInt(tokenId),
+          total, 
+          claim, 
+          date,
+          merkle ? BigInt(1) : BigInt(0)
+        );
+        setIsLoading(FETCH_STATUS.WAIT_TX)
+        setTx(response)
+        await response?.wait()
+      }
+      setIsLoading(FETCH_STATUS.COMPLETED)
     } catch (error) {
       console.log('error: ', error)
       setIsLoading(FETCH_STATUS.ERROR)
@@ -171,16 +189,12 @@ const useAirdrop = () => {
   }
   const deployERC20Airdrop = async(airdrop: ICreateAirdrop) => {
     const { name, tokenAddress, totalAmount, claimAmount, expirationDate } = airdrop;
-    console.log('entering to airdrop creation');
     const _airdropManager = await initializeProvider()
-    console.log('airdrop manager is ', _airdropManager);
     const formatDate = new Date(expirationDate + ':00Z');
     const date = formatDate.getTime() / 1000;
 
     const total = ethers.parseEther(totalAmount.toString());
     const claim = ethers.parseEther(claimAmount.toString());
-    console.log('total: ', total.toString());
-    console.log('claim: ', claim.toString());
     
     try {
       setIsLoading(FETCH_STATUS.WAIT_WALLET)
@@ -197,8 +211,6 @@ const useAirdrop = () => {
         setIsLoading(FETCH_STATUS.WAIT_TX)
         setTx(txReceipt.transactionHash)
       } else {
-        console.log('deploying airdrop');
-        console.log('enter parameters', name, tokenAddress, total, claim, date);
         if(!_airdropManager) {
           throw new Error('AirdropManager not initialized');
         }
@@ -209,14 +221,8 @@ const useAirdrop = () => {
           claim, 
           date,
         );
-        console.log('response deploying airdrop: ', response);
-        
         setIsLoading(FETCH_STATUS.WAIT_TX)
-        console.log('await response?.wait()');
-        
         setTx(response)
-        console.log('response is ', response);
-        
         await response?.wait()
       }
       setIsLoading(FETCH_STATUS.COMPLETED)
@@ -368,7 +374,8 @@ const useAirdrop = () => {
     claim,
     allowedAddress,
     deployERC20Airdrop,
-    fetchImage
+    fetchImage,
+    deployERC1155Airdrop
   }
 }
 

@@ -25,5 +25,6 @@ export interface ICreateAirdrop {
   totalAmount: number,
   claimAmount: number,
   expirationDate: string,
+  tokenId?: number,
   mode?: 0 | 1 | 2
 }

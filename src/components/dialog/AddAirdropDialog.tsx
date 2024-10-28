@@ -17,11 +17,12 @@ const CREATE_AIRDROP_STATE: ICreateAirdrop = {
   tokenAddress: '',
   totalAmount: 0,
   claimAmount: 0,
-  expirationDate: ''
+  expirationDate: '',
+  tokenId: 0,
 }
 
 function AddAirdropDialog({ open, closeDialog }: props) {
-  const { isLoading, addAirdrop, setIsLoading, getAllAirdrops, deployERC20Airdrop } = useAirdrop();
+  const { isLoading, addAirdrop, setIsLoading, getAllAirdrops, deployERC20Airdrop, deployERC1155Airdrop } = useAirdrop();
   const {
     isAdmin,
     address,
@@ -81,7 +82,9 @@ function AddAirdropDialog({ open, closeDialog }: props) {
       if(erc20){
         await deployERC20Airdrop(createAirdrop);
       }else if (erc1155) {
-                
+        console.log('is merkle ', merkle);
+        
+        await deployERC1155Airdrop(createAirdrop, merkle);
       }
     }
   }
@@ -209,6 +212,18 @@ function AddAirdropDialog({ open, closeDialog }: props) {
                       height={35}  
                     />
                   </div>
+                  {erc1155 && <div className='w-1/2 p-2'>
+                    <label htmlFor="tokenId" className='font-bold text-base ml-3 mb-1 block'>Token ID</label>
+                    <Input
+                      type='number'
+                      value={createAirdrop.tokenId}
+                      onChange={(e) => handleFormCreateAirdrop(e)}
+                      id='tokenId'
+                      name='tokenId'
+                      placeholder='Token ID'
+                      height={35}  
+                    />
+                  </div>}
                   <div className='w-1/2 p-2'>
                     <label htmlFor="name" className='font-bold text-base ml-3 mb-1 flex justify-between items-center'>
                       Expiration Date
