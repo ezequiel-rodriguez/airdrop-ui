@@ -110,18 +110,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Strings__factory>;
     getContractFactory(
-      name: "Administrable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Administrable__factory>;
-    getContractFactory(
-      name: "AirdropDeployerERC1155",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AirdropDeployerERC1155__factory>;
-    getContractFactory(
-      name: "AirdropDeployerERC20",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AirdropDeployerERC20__factory>;
-    getContractFactory(
       name: "AirdropManager",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AirdropManager__factory>;
@@ -129,10 +117,6 @@ declare module "hardhat/types/runtime" {
       name: "CustomAirdrop1155",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CustomAirdrop1155__factory>;
-    getContractFactory(
-      name: "CustomAirdrop1155Merkle",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.CustomAirdrop1155Merkle__factory>;
     getContractFactory(
       name: "CustomAirdrop1155Merkle",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -149,6 +133,18 @@ declare module "hardhat/types/runtime" {
       name: "OpenAirdropERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OpenAirdropERC20__factory>;
+    getContractFactory(
+      name: "Administrable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Administrable__factory>;
+    getContractFactory(
+      name: "AirdropDeployerERC1155",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AirdropDeployerERC1155__factory>;
+    getContractFactory(
+      name: "AirdropDeployerERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AirdropDeployerERC20__factory>;
     getContractFactory(
       name: "IAirdrop",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -291,21 +287,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Strings>;
     getContractAt(
-      name: "Administrable",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Administrable>;
-    getContractAt(
-      name: "AirdropDeployerERC1155",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AirdropDeployerERC1155>;
-    getContractAt(
-      name: "AirdropDeployerERC20",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.AirdropDeployerERC20>;
-    getContractAt(
       name: "AirdropManager",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -315,11 +296,6 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.CustomAirdrop1155>;
-    getContractAt(
-      name: "CustomAirdrop1155Merkle",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.CustomAirdrop1155Merkle>;
     getContractAt(
       name: "CustomAirdrop1155Merkle",
       address: string | ethers.Addressable,
@@ -340,6 +316,21 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.OpenAirdropERC20>;
+    getContractAt(
+      name: "Administrable",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Administrable>;
+    getContractAt(
+      name: "AirdropDeployerERC1155",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AirdropDeployerERC1155>;
+    getContractAt(
+      name: "AirdropDeployerERC20",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AirdropDeployerERC20>;
     getContractAt(
       name: "IAirdrop",
       address: string | ethers.Addressable,
@@ -463,18 +454,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Strings>;
     deployContract(
-      name: "Administrable",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Administrable>;
-    deployContract(
-      name: "AirdropDeployerERC1155",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.AirdropDeployerERC1155>;
-    deployContract(
-      name: "AirdropDeployerERC20",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.AirdropDeployerERC20>;
-    deployContract(
       name: "AirdropManager",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.AirdropManager>;
@@ -482,10 +461,6 @@ declare module "hardhat/types/runtime" {
       name: "CustomAirdrop1155",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CustomAirdrop1155>;
-    deployContract(
-      name: "CustomAirdrop1155Merkle",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.CustomAirdrop1155Merkle>;
     deployContract(
       name: "CustomAirdrop1155Merkle",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -502,6 +477,18 @@ declare module "hardhat/types/runtime" {
       name: "OpenAirdropERC20",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.OpenAirdropERC20>;
+    deployContract(
+      name: "Administrable",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.Administrable>;
+    deployContract(
+      name: "AirdropDeployerERC1155",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.AirdropDeployerERC1155>;
+    deployContract(
+      name: "AirdropDeployerERC20",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.AirdropDeployerERC20>;
     deployContract(
       name: "IAirdrop",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -644,21 +631,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Strings>;
     deployContract(
-      name: "Administrable",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Administrable>;
-    deployContract(
-      name: "AirdropDeployerERC1155",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.AirdropDeployerERC1155>;
-    deployContract(
-      name: "AirdropDeployerERC20",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.AirdropDeployerERC20>;
-    deployContract(
       name: "AirdropManager",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -668,11 +640,6 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CustomAirdrop1155>;
-    deployContract(
-      name: "CustomAirdrop1155Merkle",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.CustomAirdrop1155Merkle>;
     deployContract(
       name: "CustomAirdrop1155Merkle",
       args: any[],
@@ -693,6 +660,21 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.OpenAirdropERC20>;
+    deployContract(
+      name: "Administrable",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.Administrable>;
+    deployContract(
+      name: "AirdropDeployerERC1155",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.AirdropDeployerERC1155>;
+    deployContract(
+      name: "AirdropDeployerERC20",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.AirdropDeployerERC20>;
     deployContract(
       name: "IAirdrop",
       args: any[],

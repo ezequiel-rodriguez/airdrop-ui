@@ -61,6 +61,8 @@ function AirdropCard({ background = 'bg-custom-orange', onClick, dialog = false,
   const trim2 = (text: string) => {
     return text.substring(text.length - 4);
   }
+  console.log(imgLink);
+  
   return (
     <>
       <article className={`${(disabled && !dialog) ? 'cursor-not-allowed bg-zinc-950 border-zinc-700' : 'border-white'} rounded-[20px] justify-between gap-2 relative ${dialog ? 'w-full h-full' : 'border p-6 w-[400px]'}`}>
@@ -163,9 +165,11 @@ function AirdropCard({ background = 'bg-custom-orange', onClick, dialog = false,
                     className="w-24 h-24 rounded-full"
                   />
                 ) : (
-                  <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
-                    <span className="text-sm">N/A</span>
-                  </div>
+                  <img
+                    src={'/img/RSKLogo.png'}
+                    alt={`airdrop token logo`}
+                    className="w-20 h-20 rounded-full"
+                  />
                 )
               }
             </div>

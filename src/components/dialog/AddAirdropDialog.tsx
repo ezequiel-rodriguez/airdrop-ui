@@ -22,7 +22,18 @@ const CREATE_AIRDROP_STATE: ICreateAirdrop = {
 
 function AddAirdropDialog({ open, closeDialog }: props) {
   const { isLoading, addAirdrop, setIsLoading, getAllAirdrops, deployERC20Airdrop } = useAirdrop();
-  const { isAdmin, address,  gasless, setGasless  } = useAuth();
+  const {
+    isAdmin,
+    address,
+    gasless,
+    setGasless,
+    erc20,
+    setErc20,
+    erc1155,
+    setErc1155,
+    merkle,
+    setMerkle,
+  } = useAuth()
   const [menu, setMenu] = useState<'add'| 'create'>('add');
   const [formCompleted, setFormCompleted] = useState<boolean>(true);
   const [createAirdrop, setCreateAirdrop] = useState<ICreateAirdrop>(CREATE_AIRDROP_STATE);
@@ -63,15 +74,29 @@ function AddAirdropDialog({ open, closeDialog }: props) {
     }));
     setFormCompleted(true);
   }
-
   const createNewAirdrop = async () => {
     setFormCompleted(areAllFieldsFilled());
+    
     if (areAllFieldsFilled()) {
-      await deployERC20Airdrop(createAirdrop);
+      if(erc20){
+        await deployERC20Airdrop(createAirdrop);
+      }else if (erc1155) {
+                
+      }
     }
   }
+  const onSelectERC20 = (value: boolean) => {
+    setErc20(value);
+    setMerkle(false);
+    setErc1155(!value);
+  }
+  const onSelectERC1155 = (value:boolean) => {
+    setErc1155(value);
+    setMerkle(false);
+    setErc20(!value);
+  }
   return (
-    <BaseDialog open={open} closeDialog={handleCloseDialog} className={`${menu === 'add' ? 'w-[430px] h-[370px]' : 'w-[700px] h-[450px]'} bg-black border border-zinc-700 transition-all duration-200`}>
+    <BaseDialog open={open} closeDialog={handleCloseDialog} className={`${menu === 'add' ? 'w-[430px] h-[400px]' : 'w-[700px] h-[550px]'} bg-black border border-zinc-700 transition-all duration-200`}>
       <div className='w-full h-full flex flex-col'>
         {
           isAdmin && <ul className='flex gap-4 mb-5'>
@@ -199,6 +224,48 @@ function AddAirdropDialog({ open, closeDialog }: props) {
                       height={35}  
                     />
                   </div>
+                  <div className="w-1/6 p-2">
+                    <label htmlFor="name" className='font-bold text-base ml-3 mb-2 block'>ERC20</label>
+                    <div className='ml-2'>
+                      <label className="flex w-max relative items-center cursor-pointer">
+                        <input
+                          checked={erc20}
+                          type="checkbox"
+                          className="sr-only"
+                          onChange={(e) => onSelectERC20(Boolean(e.target.checked))}
+                        />
+                        <span className="w-9 h-5 bg-card rounded-full border border-input toggle-bg"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="w-1/6 p-2">
+                    <label htmlFor="name" className='font-bold text-base ml-3 mb-2 block'>ERC1155</label>
+                    <div className='ml-2'>
+                      <label className="flex w-max relative items-center cursor-pointer">
+                        <input
+                          checked={erc1155}
+                          type="checkbox"
+                          className="sr-only"
+                          onChange={(e) => onSelectERC1155(Boolean(e.target.checked))}
+                        />
+                        <span className="w-9 h-5 bg-card rounded-full border border-input toggle-bg"></span>
+                      </label>
+                    </div>
+                  </div>
+                  {erc1155 && <div className="w-1/6 p-2">
+                    <label htmlFor="name" className='font-bold text-base ml-3 mb-2 block'>MERKLE</label>
+                    <div className='ml-2'>
+                      <label className="flex w-max relative items-center cursor-pointer">
+                        <input
+                          checked={merkle}
+                          type="checkbox"
+                          className="sr-only"
+                          onChange={(e) => setMerkle(Boolean(e.target.checked))}
+                        />
+                        <span className="w-9 h-5 bg-card rounded-full border border-input toggle-bg"></span>
+                      </label>
+                    </div>
+                  </div>}
                   <div className="w-1/2 p-2">
                     <label htmlFor="name" className='font-bold text-base ml-3 mb-2 block'>Gasless</label>
                     <div className='ml-2'>
