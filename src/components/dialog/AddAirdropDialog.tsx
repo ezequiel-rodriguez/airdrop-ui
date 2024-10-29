@@ -18,7 +18,7 @@ const CREATE_AIRDROP_STATE: ICreateAirdrop = {
   totalAmount: 0,
   claimAmount: 0,
   expirationDate: '',
-  tokenId: 0,
+  tokenId: -1,
 }
 
 function AddAirdropDialog({ open, closeDialog }: props) {

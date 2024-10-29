@@ -13,6 +13,7 @@ import CopyIcon from '../icons/CopyIcon'
 import { formatDate } from '@/utils/formatDate'
 import useAirdrop from '@/hooks/useAirdrop'
 import ConnectWalletButton from '../navigation/ConnectWalletButton'
+import { PINATA_URL } from '@/constants'
 type props = {
   background?: string
   dialog?: boolean
@@ -27,7 +28,6 @@ function formatAddress(address: string) {
 
 function AirdropCard({ background = 'bg-custom-orange', onClick, dialog = false, airdrop, onCloseDialog }: props) {
   const { isAdmin, address, gasless, setGasless } = useAuth();
-  const { fetchImage } = useAirdrop();
   const [amount, setAmount] = useState<string>('0');
   const [copied, setCopied] = useState<boolean>(false);
   const [imgLink, setImgLink] = useState<string | null>(null);
@@ -39,14 +39,6 @@ function AirdropCard({ background = 'bg-custom-orange', onClick, dialog = false,
     const claim = MerkleData.claims.find(claim => claim.address.toLowerCase() === address.toLowerCase());
     setAmount(claim?.amount ? ethers.formatUnits(claim?.amount, 18).toString() : '0');
   }, [address, airdrop.airdropType]);
-  useEffect(() => {
-    getImageLink();
-  }, [])
-
-  const getImageLink = async () => {
-    const imageLink = await fetchImage(airdrop.address);
-    setImgLink(imageLink ?? null);
-  }
   const copyAddress = (address: string) => {
     setCopied(true);
     navigator.clipboard.writeText(address)
@@ -157,12 +149,12 @@ function AirdropCard({ background = 'bg-custom-orange', onClick, dialog = false,
                   <CopyIcon className='hover:fill-zinc-200 fill-zinc-400 relative w-4 h-4' />
                 </button>
               </div>
-              {imgLink ?
+              {airdrop.uri && airdrop.uri != '' ?
                 (
                   <img
-                    src={imgLink}
+                    src={`${PINATA_URL}${airdrop.uri}`}
                     alt={`airdrop token logo`}
-                    className="w-24 h-24 rounded-full"
+                    className="w-20 h-20 rounded-full"
                   />
                 ) : (
                   <img

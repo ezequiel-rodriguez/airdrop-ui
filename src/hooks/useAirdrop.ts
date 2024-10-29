@@ -73,7 +73,8 @@ const useAirdrop = () => {
         airdropType: detail[6].toString() as '0' | '1' | '2',
         uri: detail![7].toString(),
       }
-
+      console.log('image,', detail![7].toString());
+      
       const balance = await airdropManager.getBalance(newAirdrop.address)
       newAirdrop.balance = Number(ethers.formatEther(balance))
       if (address) {
@@ -118,16 +119,6 @@ const useAirdrop = () => {
     setAirdropLoading(false)
   }, [initializeProvider, setAirdropLoading, setIsAdmin, address, setAirdrops])
 
-  const fetchImage = async (airdropAddress: string) => {
-    // try {
-    //   const airdropManager = await initializeProvider()
-    //   const imgLink = await airdropManager?.getAirdropTokenUri(airdropAddress)
-    //   return `${PINATA_URL}${imgLink}`
-    // } catch (error) {
-    //   console.log('error: ', error);
-    // }
-    //TODO get it from the item
-  }
   const removeAirdrop = async (airdropAddress: string) => {
     try {
       setIsLoading(FETCH_STATUS.WAIT_WALLET)
@@ -383,7 +374,6 @@ const useAirdrop = () => {
     claim,
     allowedAddress,
     deployERC20Airdrop,
-    fetchImage,
     deployERC1155Airdrop
   }
 }
