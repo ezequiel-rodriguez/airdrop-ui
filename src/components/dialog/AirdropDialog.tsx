@@ -49,7 +49,7 @@ function AirdropDialog({ open, closeDialog }: props) {
               </button>
             </li>
             {
-              airdrop?.airdropType === 'custom' &&
+              airdrop?.airdropType === '2' &&
               <li className={`cursor-pointer hover:text-zinc-300 text-sm font-medium text-zinc-400 mb-3 ${menu === 'allow' ? 'border-b-2': ''}`}>
                 <button onClick={() => setMenu('allow')}>
                   Allowed wallets
