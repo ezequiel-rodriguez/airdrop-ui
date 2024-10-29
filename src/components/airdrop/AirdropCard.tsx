@@ -1,7 +1,6 @@
 import Button from '../common/Button'
 import XIcon from '../icons/XIcon'
 import ProgressBar from './ProgressBar'
-import AirdropIcon from '../icons/AirdropIcon'
 import ArrowRightIcon from '../icons/ArrowRightIcon'
 import { useAuth } from '@/context/AuthContext'
 import ConnectWalletButton from '../navigation/ConnectWalletButton'
@@ -35,7 +34,7 @@ function AirdropCard({ background = 'bg-custom-orange', onClick, dialog = false,
   let disabled = false;
   if (address) disabled = !isAdmin ? (!airdrop.isAllowed || airdrop.isClaimed! || airdrop?.isExpired! || airdrop.balance === 0) : false;
   useEffect(() => {
-    if (airdrop.airdropType !== 'merkle') return;
+    if (airdrop.airdropType !== '1') return;
     const claim = MerkleData.claims.find(claim => claim.address.toLowerCase() === address.toLowerCase());
     setAmount(claim?.amount ? ethers.formatUnits(claim?.amount, 18).toString() : '0');
   }, [address, airdrop.airdropType]);
@@ -127,7 +126,7 @@ function AirdropCard({ background = 'bg-custom-orange', onClick, dialog = false,
             <section className='w-full mt-2'>
               <div className='flex justify-between'>
                 <h6>Amount to receive</h6>
-                <p>{airdrop.airdropType === 'merkle' ? amount : airdrop.claimAmount}</p>
+                <p>{airdrop.airdropType === '1' ? 'Variable' : airdrop.claimAmount}</p>
               </div>
               {
                 airdrop.balance !== 0 &&
@@ -138,7 +137,7 @@ function AirdropCard({ background = 'bg-custom-orange', onClick, dialog = false,
               }
               <div className='text-zinc-500 font-semibold text-xs flex justify-between mt-1'>
                 <h6>Type</h6>
-                <p>{airdrop.airdropType}</p>
+                <p>{airdrop.airdropType === '0' ? 'ERC 1155 Custom' : airdrop.airdropType === '1' ? 'ERC 1155 Merkle' : 'ERC 20'}</p>
               </div>
               <div className='text-zinc-500 font-semibold text-xs flex justify-between mt-2'>
                 <h6>Expiration</h6>

@@ -70,7 +70,7 @@ const useAirdrop = () => {
         airdropAmountLeft: Number(ethers.formatEther(detail![3])),
         claimAmount: Number(ethers.formatEther(detail![4])),
         expirationDate: new Date(parseFloat(detail![5].toString()) * 1000),
-        airdropType: Number(ethers.toBigInt(detail[6])) ? 'merkle' : 'custom', //TODO change for correct reading value type 0 custom 1 merkle 2 fungible
+        airdropType: detail[6].toString() as '0' | '1' | '2',
         uri: detail![7].toString(),
       }
 
@@ -81,17 +81,22 @@ const useAirdrop = () => {
           items[Number(item)].toString(),
           address
         )
-        if (newAirdrop.airdropType === 'custom') {
+        if (newAirdrop.airdropType === '0') {
           newAirdrop.isAllowed = await airdropManager.isAllowed(
             items[Number(item)].toString(),
             address
           )
-        } else {
+        } else if (newAirdrop.airdropType === '1') {
           newAirdrop.isAllowed = merkleData.claims.some(
             (merkle) => merkle.address.toLowerCase() === address
           )
           newAirdrop.merkle = merkleData.claims.find(
             (merkle) => merkle.address.toLowerCase() === address
+          )
+        } else if (newAirdrop.airdropType === '2') {
+          newAirdrop.isAllowed = await airdropManager.isAllowed(
+            items[Number(item)].toString(),
+            address
           )
         }
       }
@@ -134,19 +139,6 @@ const useAirdrop = () => {
       setIsLoading(FETCH_STATUS.COMPLETED)
     } catch (error) {
       console.log('error: ', error)
-    }
-  }
-  const addAirdrop = async (address: string) => {
-    try {
-      setIsLoading(FETCH_STATUS.WAIT_WALLET)
-      const response = await airdropManager?.addAirdrop(address)
-      setIsLoading(FETCH_STATUS.WAIT_TX)
-      setTx(response)
-      await response?.wait()
-      setIsLoading(FETCH_STATUS.COMPLETED)
-    } catch (error) {
-      console.log('error: ', error)
-      setIsLoading(FETCH_STATUS.ERROR)
     }
   }
   const deployERC1155Airdrop = async(airdrop: ICreateAirdrop, merkle: boolean) => {
@@ -385,7 +377,6 @@ const useAirdrop = () => {
   }
   return {
     removeAirdrop,
-    addAirdrop,
     getAllAirdrops,
     isLoading,
     setIsLoading,

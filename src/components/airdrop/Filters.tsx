@@ -45,34 +45,6 @@ function Filters({ filters, setFilters }: Props) {
           )}
         </div>
         <div className="flex gap-2 items-center ">
-        <span className="text-lg font-semibold mr-5">Filter By</span>
-        <span className="text-sm font-semibold">ERC20</span>
-        <label className="flex w-max relative items-center cursor-pointer">
-          <input
-            checked={erc20}
-            type="checkbox"
-            className="sr-only"
-            onChange={(e) => {
-              setErc1155(false)
-              setErc20(Boolean(e.target.checked))
-            }}
-          />
-          <span className="w-9 h-5 bg-card rounded-full border border-input toggle-bg"></span>
-        </label>
-        <span className="text-sm font-semibold">ERC1155</span>
-        <label className="flex w-max relative items-center cursor-pointer">
-          <input
-            checked={erc1155}
-            type="checkbox"
-            className="sr-only"
-            onChange={(e) => {
-              setErc20(false)
-              setErc1155(Boolean(e.target.checked))
-            }}
-          />
-          <span className="w-9 h-5 bg-card rounded-full border border-input toggle-bg"></span>
-        </label>
-
         </div>
       </div>
     </>

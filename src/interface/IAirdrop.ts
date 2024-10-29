@@ -5,7 +5,7 @@ export interface IAirdrop {
   airdropAmountLeft: number
   claimAmount: number
   expirationDate: Date
-  airdropType: 'custom' | 'merkle',
+  airdropType: '0' | '1' | '2',
   uri?: string
   progress?: number
   isClaimed?: boolean

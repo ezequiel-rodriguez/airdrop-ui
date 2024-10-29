@@ -22,7 +22,7 @@ const CREATE_AIRDROP_STATE: ICreateAirdrop = {
 }
 
 function AddAirdropDialog({ open, closeDialog }: props) {
-  const { isLoading, addAirdrop, setIsLoading, getAllAirdrops, deployERC20Airdrop, deployERC1155Airdrop } = useAirdrop();
+  const { isLoading, setIsLoading, getAllAirdrops, deployERC20Airdrop, deployERC1155Airdrop } = useAirdrop();
   const {
     isAdmin,
     address,
@@ -35,23 +35,12 @@ function AddAirdropDialog({ open, closeDialog }: props) {
     merkle,
     setMerkle,
   } = useAuth()
-  const [menu, setMenu] = useState<'add'| 'create'>('add');
   const [formCompleted, setFormCompleted] = useState<boolean>(true);
   const [createAirdrop, setCreateAirdrop] = useState<ICreateAirdrop>(CREATE_AIRDROP_STATE);
-  const [contractAddress, setContractAddress] = useState<string>('');
 
-  useEffect(() => {
-    setMenu(isAdmin ? 'add' : 'create');
-  }, [isAdmin, address]);
-
-  const handleAddAirdrop = () => {
-    if (!contractAddress) return
-    addAirdrop(contractAddress);
-  }
   const handleCloseDialog = () => {
     closeDialog();
     setIsLoading(FETCH_STATUS.INIT);
-    setContractAddress('');
     setCreateAirdrop(CREATE_AIRDROP_STATE);
     setFormCompleted(true);
   }
@@ -59,7 +48,6 @@ function AddAirdropDialog({ open, closeDialog }: props) {
     if (isLoading === FETCH_STATUS.COMPLETED) {
       closeDialog();
       getAllAirdrops();
-      setContractAddress('');
     }
     setIsLoading(FETCH_STATUS.INIT);
   }
@@ -99,68 +87,9 @@ function AddAirdropDialog({ open, closeDialog }: props) {
     setErc20(!value);
   }
   return (
-    <BaseDialog open={open} closeDialog={handleCloseDialog} className={`${menu === 'add' ? 'w-[430px] h-[400px]' : 'w-[700px] h-[550px]'} bg-black border border-zinc-700 transition-all duration-200`}>
+    <BaseDialog open={open} closeDialog={handleCloseDialog} className={'w-[700px] h-[550px] bg-black border border-zinc-700 transition-all duration-200'}>
       <div className='w-full h-full flex flex-col'>
         {
-          isAdmin && <ul className='flex gap-4 mb-5'>
-            <li className={`cursor-pointer hover:text-zinc-300 text-sm font-medium text-zinc-400 mb-3 pb-1 ${menu === 'add' ? 'border-b-2': ''}`}>
-              <button onClick={() => setMenu('add')}>
-                Add AirDrop
-              </button>
-            </li>
-            {
-              <li className={`cursor-pointer hover:text-zinc-300 text-sm font-medium text-zinc-400 mb-3 ${menu === 'create' ? 'border-b-2': ''}`}>
-                <button onClick={() => setMenu('create')}>
-                  Create AirDrop
-                </button>
-              </li>
-            }
-          </ul>
-        }
-        {
-          menu === 'add' &&
-            <ContentDialog
-              initialContent={
-                <>
-                  <h2 className='bg-custom-green mt-1 font-bold text-xl text-black w-max px-1 items-start'>ADD AIRDROP</h2>
-                  <form className='w-full mt-7 items-center'>
-                    <label htmlFor="name" className='font-bold text-base ml-3 mb-3 block'>Airdrop Contract Address</label>
-                    <Input
-                      value={contractAddress}
-                      onChange={(e) => setContractAddress(e.target.value)}
-                      id='name'
-                      name='name'
-                      placeholder='contract address'
-                      height={40}  
-                    />
-                  </form>
-                  <div className='w-full flex mt-16 justify-between'>
-                    <Button
-                      onClick={() => handleCloseDialog()}
-                      width={80}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={() => handleAddAirdrop()}
-                      variant='secondary'
-                      outline
-                      width={120}
-                    >
-                      Add Airdrop
-                    </Button>
-                  </div>
-                </>
-              }
-              status={isLoading}
-              loadingTitle='Adding airdrop'
-              createdTitle='AirDrop was added'
-              onClose={() => handleReset()}
-              btnError='try again'
-            />
-        }
-        {
-          menu === 'create' &&
           <ContentDialog
             initialContent={
               <>
