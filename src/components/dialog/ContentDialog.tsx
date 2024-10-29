@@ -26,7 +26,7 @@ function ContentDialog({ status, onClose, loadingTitle, createdTitle, initialCon
         </>
       }
       {
-        status === FETCH_STATUS.WAIT_TX &&
+        (status === FETCH_STATUS.WAIT_TX || status === FETCH_STATUS.WAIT_SPONSOR) &&
         <>
           <h2 className='bg-custom-orange px-2 text-2xl text-black w-max text-center font-bold'>
           { loadingTitle }

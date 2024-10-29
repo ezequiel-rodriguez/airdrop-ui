@@ -3,15 +3,16 @@ import XIcon from '../icons/XIcon'
 import ProgressBar from './ProgressBar'
 import ArrowRightIcon from '../icons/ArrowRightIcon'
 import { useAuth } from '@/context/AuthContext'
-import ConnectWalletButton from '../navigation/ConnectWalletButton'
 import Badge from '../common/Badge'
 import { IAirdrop } from '@/interface/IAirdrop'
+import Connect from '../navigation/Connect'
 import MerkleData from '@/utils/merkleData.json'
 import { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import CopyIcon from '../icons/CopyIcon'
 import { formatDate } from '@/utils/formatDate'
 import useAirdrop from '@/hooks/useAirdrop'
+import ConnectWalletButton from '../navigation/ConnectWalletButton'
 type props = {
   background?: string
   dialog?: boolean
