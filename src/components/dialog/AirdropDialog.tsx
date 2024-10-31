@@ -38,7 +38,7 @@ function AirdropDialog({ open, closeDialog }: props) {
     setWalletAddress('');
   }
   return (
-    <BaseDialog open={open} closeDialog={handleCloseDialog} className={`w-[450px] ${isAdmin ? 'h-[410px]' : 'min-h-[360px]'} ${isLoading !== FETCH_STATUS.INIT && 'h-[360px]'}`}>
+    <BaseDialog open={open} closeDialog={handleCloseDialog} className={`w-[450px] h-[330px]`}>
       <div className={`w-full h-full flex flex-col ${!isAdmin && 'pt-4'}`}>
         {
           isAdmin && 
@@ -49,7 +49,7 @@ function AirdropDialog({ open, closeDialog }: props) {
               </button>
             </li>
             {
-              airdrop?.airdropType === 'custom' &&
+              airdrop?.airdropType === '2' &&
               <li className={`cursor-pointer hover:text-zinc-300 text-sm font-medium text-zinc-400 mb-3 ${menu === 'allow' ? 'border-b-2': ''}`}>
                 <button onClick={() => setMenu('allow')}>
                   Allowed wallets
@@ -83,6 +83,7 @@ function AirdropDialog({ open, closeDialog }: props) {
                   <form className='mt-6'>
                     <label htmlFor="name" className='font-bold text-base ml-3 mb-3 block'>User address</label>
                     <Input
+                      name='walletAddress'
                       value={walletAddress}
                       onChange={(e) => setWalletAddress(e.target.value)}
                       id='name'

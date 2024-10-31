@@ -29,7 +29,13 @@ interface AuthContextType {
   setAirdrops: React.Dispatch<React.SetStateAction<IAirdrop[] | undefined>>
   airdrops: IAirdrop[] | undefined
   setGasless: React.Dispatch<React.SetStateAction<boolean>>
-  gasless: boolean
+  gasless: boolean,
+  erc20: boolean,
+  setErc20: React.Dispatch<React.SetStateAction<boolean>>,
+  erc1155: boolean,
+  setErc1155: React.Dispatch<React.SetStateAction<boolean>>,
+  merkle: boolean,
+  setMerkle: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -44,8 +50,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [airdropLoading, setAirdropLoading] = useState<boolean>(false);
   const [tx, setTx] = useState<ContractTransactionResponse>();
   const [airdrops, setAirdrops] = useState<IAirdrop[]>();
-  const [gasless, setGasless] = useState<boolean>(false);
-
+  const [gasless, setGasless] = useState<boolean>(true);
+  const [erc20, setErc20] = useState<boolean>(true);
+  const [erc1155, setErc1155] = useState<boolean>(false);
+  const [merkle, setMerkle] = useState<boolean>(false);
   const [provider, setProvider] = useState<ethers.BrowserProvider | undefined>(
     undefined
   )
@@ -79,7 +87,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         airdrops,
         setAirdrops,
         setGasless,
-        gasless
+        gasless,
+        erc20,
+        setErc20,
+        erc1155,
+        setErc1155,
+        merkle,
+        setMerkle,
       }}
     >
       {children}

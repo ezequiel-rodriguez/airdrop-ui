@@ -40,9 +40,15 @@ To clone and run this project locally, follow these steps:
    Create a `.env` file in the root directory and add necessary environment variables. Example:
 
    ```sh
-    NEXT_PUBLIC_AIRDROP_MANAGER_ADDRESS=
-    NEXT_PUBLIC_RPC_URL=
-    NEXT_PUBLIC_EXPLORER=
+   NEXT_PUBLIC_AIRDROP_MANAGER_ADDRESS=
+   NEXT_PUBLIC_RPC_URL=
+   NEXT_PUBLIC_EXPLORER=
+   NEXT_PUBLIC_BUNDLER_API_KEY="eyJvcmciOiI2NTIzZjY5MzUwOTBmNzAwMDFiYjJkZWIiLCJpZCI6IjMxMDZiOGY2NTRhZTRhZTM4MGVjYjJiN2Q2NDMzMjM4IiwiaCI6Im11cm11cjEyOCJ9"
+   NEXT_PUBLIC_CUSTOM_BUNDLER_URL="https://rootstocktestnet-bundler.etherspot.io/"
+   NEXT_PUBLIC_CHAIN_ID="31"
+   NEXT_PUBLIC_ARKA_PUBLIC_KEY="arka_public_key"
+   NEXT_PUBLIC_PK=
+   NEXT_PUBLIC_PINATA_URL=
    ```
 
 4. **Run the development server**:
@@ -50,7 +56,8 @@ To clone and run this project locally, follow these steps:
    ```sh
    npm run dev
    ```
-
+## Smart Contracts
+You can follow the [Airdrop Template Repository](https://github.com/rsksmart/airdrop-template) which contains the smart contracts for the Airdrop Manager and the Airdrop Token. You can deploy them by yourself or use the deployed contracts on the RSK Testnet.
 
 ## Usage
 

@@ -14,7 +14,7 @@ const Connect = ({ className, connectWalletTitle = 'Connect wallet', connectRNST
     return (
         <div className={className}>
             <ConnectWalletButton title={connectWalletTitle} width={width} />
-            <ConnectRNSDomainButton title={connectRNSTitle} width={width} />
+            {/* <ConnectRNSDomainButton title={connectRNSTitle} width={width} />  //Commented for future implementation*/} 
         </div>
     )
 }
